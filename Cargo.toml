@@ -1,0 +1,13 @@
+[package]
+name = "system-app-base"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies.sdl2]
+version = "0.36.0"
+default-features = false
+features = ["image"]
+
+[[bin]]
+name = "game"
+path = "src/main.rs"
