@@ -8,6 +8,3 @@ version = "0.36.0"
 default-features = false
 features = ["image"]
 
-[[bin]]
-name = "game"
-path = "src/main.rs"

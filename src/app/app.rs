@@ -1,3 +1,8 @@
+use crate::app::game_object::GameObject;
+use sdl2::keyboard::Keycode;
+use crate::Event::KeyDown;
+use crate::keydown;
+use sdl2::event::Event;
 use crate::Entity;
 use sdl2::EventPump;
 use sdl2::Sdl;
@@ -15,11 +20,12 @@ pub struct App<'a> {
     window: Canvas<Window>,
     texture_creator: TextureCreator<WindowContext>,
     texture: HashMap<String, Texture<'a>>,
+    event_pump : EventPump,
     pub entitys: Vec<Entity>,
     pub running: bool,
 }
 impl<'a> App<'a> {
-    pub fn new(title: &str, width: u32, height: u32) -> (App<'a>, EventPump) {
+    pub fn new(title: &str, width: u32, height: u32) -> App<'a> {
         let sdl_context: Sdl = sdl2::init().expect("Erro in sdl2 init");
         let video_subsystem: VideoSubsystem = sdl_context
             .video()
@@ -36,16 +42,14 @@ impl<'a> App<'a> {
 
         let event_pump = sdl_context.event_pump().unwrap();
 
-        (
             App {
                 texture: Default::default(),
                 texture_creator: window.texture_creator(),
                 window,
+                event_pump,
                 entitys: vec![],
                 running: true,
-            },
-            event_pump,
-        )
+            }
     }
 
     #[allow(dead_code)]
@@ -66,11 +70,19 @@ impl<'a> App<'a> {
     pub fn get_textures(&mut self) -> &mut HashMap<String, Texture<'a>> {
         &mut self.texture
     }
-}
 
-#[macro_export]
-macro_rules! frame_hate {
-    ($a:expr) => {
-        std::thread::sleep(Duration::new(0, 1_000_000_000u32 / $a));
-    };
+    pub fn event_player(&mut self) {
+        for mut event in self.event_pump.poll_iter() {
+            match event {
+                Event::Quit { .. } | keydown!(Keycode::Escape) => self.running= false,
+                _ => {
+                    if let Some(entity) = self.entitys.first_mut() {
+                        entity.input(&mut event)
+                    }
+
+                }
+            }
+        }
+    }
+
 }
