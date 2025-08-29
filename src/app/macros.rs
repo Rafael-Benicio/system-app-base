@@ -30,10 +30,10 @@ macro_rules! draw_simple_rect_image {
 
 #[macro_export]
 macro_rules! draw_simple_rect {
-    ($canvas:expr,$self:expr) => {{
-        $canvas.set_draw_color($self.color);
-        let _ = $canvas.draw_rect(*$self.get_draw_rect());
-        let _ = $canvas.fill_rect(*$self.get_draw_rect());
+    ($canvas:expr,$rect:expr,$color:expr) => {{
+        $canvas.set_draw_color($color);
+        let _ = $canvas.draw_rect($rect);
+        let _ = $canvas.fill_rect($rect);
     }};
 }
 
