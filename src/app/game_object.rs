@@ -20,7 +20,7 @@ pub trait CollisionArea<T> {
 
 pub trait Control {
         #[allow(dead_code)]
-        fn input(&mut self, _event_pump: &mut Event) {}
+        fn input(&mut self, _event: &mut Event) {}
 
         #[allow(dead_code)]
         fn set_position(&mut self, _x: i32, _y: i32) {}
