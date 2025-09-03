@@ -1,6 +1,6 @@
 use crate::Event::KeyDown;
 use crate::app::game_object::GameObject;
-use crate::{Color, draw_simple_rect, keydown};
+use crate::{Color, keydown};
 use sdl2::keyboard::Keycode;
 
 use sdl2::event::Event;
@@ -86,13 +86,7 @@ impl<'a, T> App<'a, T> {
                 self.window.clear();
 
                 for entity in self.entitys.iter_mut() {
-                        let rect = entity.get_draw_rect();
-
-                        if rect.is_none() {
-                                continue;
-                        }
-
-                        draw_simple_rect!(self.window, *rect.unwrap(), entity.get_color());
+                        entity.render(&mut self.window);
                 }
 
                 self.window.present();

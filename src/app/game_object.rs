@@ -1,6 +1,8 @@
+use sdl2::video::Window;
 use sdl2::event::Event;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
+use sdl2::render::Canvas;
 
 #[allow(dead_code)]
 pub trait GameObject<T>: Update + Draw + Control + CollisionArea<T> {}
@@ -49,4 +51,7 @@ pub trait Draw {
         fn get_draw_rect(&self) -> Option<&Rect> {
                 None
         }
+
+        #[allow(dead_code)]
+        fn render(&self, _window: &mut Canvas<Window>){}
 }
