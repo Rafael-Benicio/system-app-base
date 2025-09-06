@@ -5,7 +5,7 @@ use sdl2::rect::Rect;
 use sdl2::render::Canvas;
 
 #[allow(dead_code)]
-pub trait GameObject<T>: Update + Draw + Control + CollisionArea<T> {}
+pub trait GameObject<T>: Update + Draw + Control<T> + CollisionArea<T> {}
 
 pub trait CollisionArea<T> {
         #[allow(dead_code)]
@@ -20,12 +20,12 @@ pub trait CollisionArea<T> {
         fn set_collision_status(&mut self, _state: bool) {}
 }
 
-pub trait Control {
+pub trait Control<T> {
         #[allow(dead_code)]
         fn input(&mut self, _event: &mut Event) {}
 
         #[allow(dead_code)]
-        fn set_position(&mut self, _x: i32, _y: i32) {}
+        fn set_position(&mut self, _x: T, _y: T) {}
 }
 
 pub trait Update {
