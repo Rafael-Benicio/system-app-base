@@ -1,15 +1,20 @@
-use sdl2::video::Window;
 use sdl2::event::Event;
 use sdl2::pixels::Color;
 use sdl2::rect::Rect;
 use sdl2::render::Canvas;
+use sdl2::video::Window;
 
 #[allow(dead_code)]
-pub trait GameObject<T>: Update + Draw + Control<T> + CollisionArea<T> {}
+pub trait GameObject<T, V>: Update + Draw + Control + CollisionArea<T, V> {}
 
-pub trait CollisionArea<T> {
+pub trait CollisionArea<T, V> {
         #[allow(dead_code)]
         fn get_collision_body(&mut self) -> Option<&mut T> {
+                None
+        }
+
+        #[allow(dead_code)]
+        fn get_force(&self) -> Option<V> {
                 None
         }
 
@@ -18,14 +23,17 @@ pub trait CollisionArea<T> {
 
         #[allow(dead_code)]
         fn set_collision_status(&mut self, _state: bool) {}
+
+        #[allow(dead_code)]
+        fn set_acceleration(&mut self, _acceleration: &V) {}
 }
 
-pub trait Control<T> {
+pub trait Control {
         #[allow(dead_code)]
         fn input(&mut self, _event: &mut Event) {}
 
         #[allow(dead_code)]
-        fn set_position(&mut self, _x: T, _y: T) {}
+        fn set_position(&mut self, _x: i32, _y: i32) {}
 }
 
 pub trait Update {
@@ -53,5 +61,5 @@ pub trait Draw {
         }
 
         #[allow(dead_code)]
-        fn render(&self, _window: &mut Canvas<Window>){}
+        fn render(&self, _window: &mut Canvas<Window>) {}
 }

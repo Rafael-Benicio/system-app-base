@@ -10,19 +10,20 @@ use sdl2::video::{Window, WindowContext};
 use sdl2::{EventPump, Sdl, VideoSubsystem};
 
 use std::collections::HashMap;
+use std::ops::{Add, Neg, Sub};
 use std::path::Path;
 
-pub struct App<'a, T> {
+pub struct App<'a, T, V> {
         window: Canvas<Window>,
         texture_creator: TextureCreator<WindowContext>,
         texture: HashMap<String, Texture<'a>>,
         event_pump: EventPump,
-        pub entitys: Vec<Box<dyn GameObject<T>>>,
+        pub entitys: Vec<Box<dyn GameObject<T, V>>>,
         pub running: bool,
 }
 
-impl<'a, T> App<'a, T> {
-        pub fn new(title: &str, width: u32, height: u32) -> App<'a, T> {
+impl<'a, T, V: Sub<Output = V> + Add<Output = V> + Neg<Output = V>> App<'a, T, V> {
+        pub fn new(title: &str, width: u32, height: u32) -> App<'a, T, V> {
                 let sdl_context: Sdl = sdl2::init().expect("Erro in sdl2 init");
                 let video_subsystem: VideoSubsystem = sdl_context
                         .video()
@@ -117,6 +118,18 @@ impl<'a, T> App<'a, T> {
                                         }
 
                                         entity_1.check_collision(rect.unwrap());
+
+                                        if entity_1.get_force().is_none()
+                                                || entity_2.get_force().is_none()
+                                        {
+                                                continue;
+                                        }
+
+                                        let res = entity_1.get_force().unwrap()
+                                                + entity_2.get_force().unwrap();
+
+                                        entity_1.set_acceleration(&res);
+                                        entity_2.set_acceleration(&res);
                                 }
                         }
                 }
